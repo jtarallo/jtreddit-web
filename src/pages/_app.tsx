@@ -1,18 +1,11 @@
+import type { AppProps } from "next/app";
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
-import { Provider, createClient } from "urql";
-
 import theme from "../theme";
+import UrqlProvider from "../providers/UrqlProvider";
 
-function MyApp({ Component, pageProps }) {
-  const client = createClient({
-    url: "http://localhost:4000/graphql",
-    fetchOptions: {
-      credentials: "include",
-    },
-  });
-
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider value={client}>
+    <UrqlProvider>
       <ChakraProvider resetCSS theme={theme}>
         <ColorModeProvider
           options={{
@@ -23,7 +16,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </ColorModeProvider>
       </ChakraProvider>
-    </Provider>
+    </UrqlProvider>
   );
 }
 
