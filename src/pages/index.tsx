@@ -1,9 +1,28 @@
+import { withUrqlClient } from "next-urql";
 import { NavBar } from "../components/NavBar";
-const Index = () => (
-  <>
-    <NavBar />
-    <div>Hello, world!</div>
-  </>
-);
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { usePostsQuery } from "../generated/graphql";
+import { Wrapper } from "../components/Wrapper";
+import { Flex } from "@chakra-ui/react";
 
-export default Index;
+const Index = () => {
+  const [{ data }] = usePostsQuery();
+  return (
+    <>
+      <NavBar />
+      <Wrapper>
+        {!data ? (
+          <p>loading...</p>
+        ) : (
+          data.posts.map((p) => (
+            <Flex key={p.id} p={4}>
+              {p.title}
+            </Flex>
+          ))
+        )}
+      </Wrapper>
+    </>
+  );
+};
+
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
