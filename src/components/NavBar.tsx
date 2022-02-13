@@ -3,10 +3,13 @@ import React from "react";
 import { LinkFlexPadded } from "./LinkFlexPadded";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
+import { isServer } from "../utils/isServer";
 
 export const NavBar: React.FC = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer(),
+  });
   const router = useRouter();
 
   let body = null;

@@ -12,7 +12,7 @@ const Index = () => {
       <NavBar />
       <Wrapper>
         {!data ? (
-          <p>loading...</p>
+          <div>loading...</div>
         ) : (
           data.posts.map((p) => (
             <Flex key={p.id} p={4}>
