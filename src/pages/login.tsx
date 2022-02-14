@@ -20,7 +20,8 @@ const Login: React.FC<{}> = ({}) => {
         onSubmit={async (values, { setErrors }) => {
           const response = await login({ options: values });
           if (response.data?.login.errors) {
-            setErrors(toErrorMap(response.data.login.errors));
+            const mappedError = toErrorMap(response.data.login.errors);
+            setErrors({ emailOrUsername: mappedError.username });
           } else if (response.data?.login.user) {
             router.push("/");
           }
