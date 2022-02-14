@@ -14,8 +14,9 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ password: "", token: "" }}
+        initialValues={{ password: "", token }}
         onSubmit={async (values, { setErrors }) => {
+          console.log(values);
           const response = await changePassword({
             token: values.token,
             password: values.password,
@@ -65,4 +66,4 @@ ChangePassword.getInitialProps = ({ query }) => {
   };
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(ChangePassword);
+export default withUrqlClient(createUrqlClient, { ssr: false })(ChangePassword);
