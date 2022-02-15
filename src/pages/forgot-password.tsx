@@ -4,7 +4,7 @@ import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
-import { Wrapper } from "../components/Wrapper";
+import { Layout } from "../components/Layout";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
@@ -13,7 +13,7 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
   const [, forgotPassword] = useForgotPasswordMutation();
 
   return !submitted ? (
-    <Wrapper variant="small">
+    <Layout variant="small">
       <Formik
         initialValues={{ email: "" }}
         onSubmit={async (values) => {
@@ -43,12 +43,12 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   ) : (
-    <Wrapper>
+    <Layout variant="small">
       <p>An email has been sent to your inbox if the email was valid.</p>
       <Link href="/">Go to home</Link>
-    </Wrapper>
+    </Layout>
   );
 };
 

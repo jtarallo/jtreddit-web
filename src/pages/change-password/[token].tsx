@@ -3,12 +3,12 @@ import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/router";
 import { NextPage } from "next/types";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useChangePasswordMutation } from "../../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useState } from "react";
+import { Layout } from "../../components/Layout";
 
 export const ChangePassword: NextPage<{}> = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ export const ChangePassword: NextPage<{}> = () => {
   );
 
   return (
-    <Wrapper variant="small">
+    <Layout variant="small">
       <Formik
         initialValues={{ password: "", token }}
         onSubmit={async (values, { setErrors }) => {
@@ -61,7 +61,7 @@ export const ChangePassword: NextPage<{}> = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 
