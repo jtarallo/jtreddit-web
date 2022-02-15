@@ -1,0 +1,8 @@
+fragment StandardPost on Post {
+    id
+    text
+    title
+    points
+    createdAt
+    updatedAt
+}

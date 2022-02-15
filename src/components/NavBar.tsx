@@ -27,6 +27,15 @@ export const NavBar: React.FC = () => {
     body = (
       <>
         <LinkFlexPadded href="/" label={`Logged in as ${data.me.username}`} />
+        <Flex mr={4}>
+          <Button
+            onClick={() => {
+              router.push("/create-post");
+            }}
+          >
+            Add post
+          </Button>
+        </Flex>
         <Flex>
           <Button
             isLoading={logoutFetching}
@@ -42,7 +51,7 @@ export const NavBar: React.FC = () => {
     );
   }
   return (
-    <Flex bg="teal" p={4}>
+    <Flex bg="teal" p={4} position="sticky" top={0} zIndex={10}>
       <Flex ml="auto" flexDirection={"row"} placeItems="center">
         {body}
       </Flex>

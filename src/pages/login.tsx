@@ -1,20 +1,20 @@
 import React from "react";
 import { Field, Form, Formik } from "formik";
 import { Button, Box } from "@chakra-ui/react";
-import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
+import { Layout } from "../components/Layout";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
 
   return (
-    <Wrapper variant="small">
+    <Layout variant="small">
       <Formik
         initialValues={{ emailOrUsername: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
@@ -62,7 +62,7 @@ const Login: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 
