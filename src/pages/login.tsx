@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import { Layout } from "../components/Layout";
+import { UilQuestion } from "@iconscout/react-unicons";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -23,7 +24,11 @@ const Login: React.FC<{}> = ({}) => {
             const mappedError = toErrorMap(response.data.login.errors);
             setErrors({ emailOrUsername: mappedError.username });
           } else if (response.data?.login.user) {
-            router.push("/");
+            if (typeof router.query.next === "string") {
+              router.push(router.query.next);
+            } else {
+              router.push("/");
+            }
           }
         }}
       >
@@ -58,6 +63,17 @@ const Login: React.FC<{}> = ({}) => {
               value="Login"
             >
               Login
+            </Button>
+            <Button
+              mt={4}
+              ml={4}
+              pr={6}
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/forgot-password");
+              }}
+            >
+              <UilQuestion /> Forgot password
             </Button>
           </Form>
         )}

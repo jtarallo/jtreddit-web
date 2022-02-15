@@ -26,6 +26,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "target": "es5",
+    "typeRoots": ["types/globals.d.ts"]
   },
   "include": [
     "next-env.d.ts",

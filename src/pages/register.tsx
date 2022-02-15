@@ -8,8 +8,10 @@ import { useRouter } from "next/router";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import { Layout } from "../components/Layout";
+import { useIsNotAuth } from "../utils/useIsNotAuth";
 
 const Register: React.FC<{}> = ({}) => {
+  useIsNotAuth();
   const router = useRouter();
   const [, register] = useRegisterMutation();
 

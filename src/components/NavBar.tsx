@@ -4,6 +4,7 @@ import { LinkFlexPadded } from "./LinkFlexPadded";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { isServer } from "../utils/isServer";
+import { UilPlus } from "@iconscout/react-unicons";
 
 export const NavBar: React.FC = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -13,12 +14,24 @@ export const NavBar: React.FC = () => {
   const router = useRouter();
 
   let body = null;
+  const createPostButton = (
+    <Flex mr={4}>
+      <Button
+        onClick={() => {
+          router.push("/create-post");
+        }}
+      >
+        <UilPlus />
+      </Button>
+    </Flex>
+  );
 
   if (fetching) {
     body = <>loading</>;
   } else if (!data?.me) {
     body = (
       <>
+        {createPostButton}
         <LinkFlexPadded href="/login" label="login" />
         <LinkFlexPadded href="/register" label="register" />
       </>
@@ -27,15 +40,7 @@ export const NavBar: React.FC = () => {
     body = (
       <>
         <LinkFlexPadded href="/" label={`Logged in as ${data.me.username}`} />
-        <Flex mr={4}>
-          <Button
-            onClick={() => {
-              router.push("/create-post");
-            }}
-          >
-            Add post
-          </Button>
-        </Flex>
+        {createPostButton}
         <Flex>
           <Button
             isLoading={logoutFetching}
