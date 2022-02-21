@@ -27,13 +27,7 @@ const Index = () => {
       // Pause observe when loading data
       unobserve();
       // Load more data
-      if (
-        data &&
-        data.posts &&
-        data.posts.posts &&
-        data.posts.posts.length &&
-        data.posts.hasMore
-      ) {
+      if (data?.posts?.posts.length && data?.posts?.hasMore) {
         setPostQueryVars({
           limit: postQueryVars.limit,
           cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
