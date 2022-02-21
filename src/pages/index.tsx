@@ -27,10 +27,16 @@ const Index = () => {
       // Pause observe when loading data
       unobserve();
       // Load more data
-      if (data && data.posts && data.posts.length) {
+      if (
+        data &&
+        data.posts &&
+        data.posts.posts &&
+        data.posts.posts.length &&
+        data.posts.hasMore
+      ) {
         setPostQueryVars({
           limit: postQueryVars.limit,
-          cursor: data.posts[data.posts.length - 1].createdAt,
+          cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
         });
       }
     },
@@ -43,22 +49,32 @@ const Index = () => {
       ) : !data ? (
         <>No data to show</>
       ) : (
-        <VStack spacing={6} align="center">
-          {data.posts.map((p, idx) => (
+        <VStack spacing={6} pb={6}>
+          {data.posts.posts.map((p, idx) => (
             <Box
+              backgroundColor={"gray.700"}
               borderRadius="lg"
               borderWidth="2px"
+              color={"white"}
               key={p.id}
-              p={5}
+              p={4}
+              ref={idx === data.posts.posts.length - 1 ? observe : null}
               shadow="md"
               width="100%"
-              backgroundColor={"purple.500"}
-              ref={idx === data.posts.length - 1 ? observe : null}
             >
-              <Heading fontSize={"2xl"}>{p.title}</Heading>
-              <Text>{p.textSnippet}</Text>
+              <Heading fontSize={"2xl"} p={4}>
+                {p.title}
+              </Heading>
+              <Text px={8} pb={8} pt={4}>
+                {p.textSnippet}
+              </Text>
             </Box>
           ))}
+          {!data.posts.hasMore ? (
+            <Text px={8} pb={8} pt={4}>
+              Last post loaded
+            </Text>
+          ) : null}
         </VStack>
       )}
     </Layout>
