@@ -41,12 +41,14 @@ const Register: React.FC<{}> = ({}) => {
             </Field>
             <Field name="email">
               {() => (
-                <InputField
-                  label="Email:"
-                  name="email"
-                  placeholder="Type your email address..."
-                  type="email"
-                />
+                <Box mt={4}>
+                  <InputField
+                    label="Email:"
+                    name="email"
+                    placeholder="Type your email address..."
+                    type="email"
+                  />
+                </Box>
               )}
             </Field>
             <Field name="password">
