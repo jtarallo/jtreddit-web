@@ -147,9 +147,11 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type SnippetPostFragment = { __typename?: 'Post', id: string, text: string, title: string, points: number, createdAt: any, updatedAt: any };
+
 export type StandardErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type StandardPostFragment = { __typename?: 'Post', id: string, text: string, title: string, points: number, createdAt: any, updatedAt: any };
+export type StandardPostFragment = { __typename?: 'Post', createdAt: any, id: string, points: number, updatedAt: any, title: string, textSnippet: string, poster: { __typename?: 'User', id: string, username: string } };
 
 export type StandardUserFragment = { __typename?: 'User', email: string, id: string, username: string };
 
@@ -168,7 +170,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: string, text: string, title: string, points: number, createdAt: any, updatedAt: any } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', createdAt: any, id: string, points: number, updatedAt: any, title: string, textSnippet: string, poster: { __typename?: 'User', id: string, username: string } } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -217,14 +219,28 @@ export type PostsQueryVariables = Exact<{
 
 export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', createdAt: any, id: string, points: number, updatedAt: any, title: string, textSnippet: string, poster: { __typename?: 'User', id: string, username: string } }> } };
 
-export const StandardPostFragmentDoc = gql`
-    fragment StandardPost on Post {
+export const SnippetPostFragmentDoc = gql`
+    fragment SnippetPost on Post {
   id
   text
   title
   points
   createdAt
   updatedAt
+}
+    `;
+export const StandardPostFragmentDoc = gql`
+    fragment StandardPost on Post {
+  createdAt
+  id
+  points
+  poster {
+    id
+    username
+  }
+  updatedAt
+  title
+  textSnippet
 }
     `;
 export const StandardErrorFragmentDoc = gql`
@@ -337,21 +353,12 @@ export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
     posts {
-      createdAt
-      id
-      points
-      poster {
-        id
-        username
-      }
-      updatedAt
-      title
-      textSnippet
+      ...StandardPost
     }
     hasMore
   }
 }
-    `;
+    ${StandardPostFragmentDoc}`;
 
 export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'>) {
   return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });

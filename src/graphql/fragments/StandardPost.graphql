@@ -1,8 +1,12 @@
 fragment StandardPost on Post {
-    id
-    text
-    title
-    points
     createdAt
+    id
+    points
+    poster {
+        id
+        username
+    }
     updatedAt
+    title
+    textSnippet
 }
