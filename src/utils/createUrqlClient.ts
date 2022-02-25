@@ -1,4 +1,4 @@
-import { fetchExchange, dedupExchange, stringifyVariables } from "urql";
+import { fetchExchange, dedupExchange, stringifyVariables, gql } from "urql";
 import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import {
   MeDocument,
@@ -11,6 +11,7 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import Router from "next/router";
+import { VoteMutationVariables } from "../generated/graphql";
 
 export type MergeMode = "before" | "after";
 
@@ -60,10 +61,13 @@ const errorExchange: Exchange =
     );
   };
 
-export const createUrqlClient = (ssrExchange: any) => ({
+export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
   url: "http://localhost:4000/graphql",
   fetchOptions: {
     credentials: "include" as const,
+    headers: {
+      cookie: ctx?.req?.headers?.cookie || "",
+    },
   },
   exchanges: [
     dedupExchange,
@@ -131,14 +135,36 @@ export const createUrqlClient = (ssrExchange: any) => ({
               }
             );
           },
-          vote(_result, _, cache, __) {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (field) => field.fieldName === "posts"
+          vote(_result, args, cache, __) {
+            const { postId, value } = args as VoteMutationVariables;
+
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                  voteStatus
+                }
+              `,
+              { id: postId }
             );
-            fieldInfos.forEach((fi) =>
-              cache.invalidate("Query", "posts", fi.arguments)
-            );
+            if (data) {
+              if (data.voteStatus === value) {
+                return;
+              }
+              const newPoints =
+                (data.points as number) + (!data.voteStatus ? 1 : 2) * value;
+              cache.writeFragment(
+                gql`
+                  fragment __ on Post {
+                    id
+                    points
+                    voteStatus
+                  }
+                `,
+                { id: postId, points: newPoints, voteStatus: value }
+              );
+            }
           },
         },
       },

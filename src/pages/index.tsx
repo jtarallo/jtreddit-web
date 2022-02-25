@@ -41,8 +41,9 @@ const Index = () => {
         <VStack spacing={6} pb={6}>
           {data.posts.posts.map((p, idx) => (
             <PostCard
-              post={p}
+              key={p.id}
               observe={idx === data.posts.posts.length - 1 ? observe : () => {}}
+              post={p}
             />
           ))}
           {!data.posts.hasMore ? (

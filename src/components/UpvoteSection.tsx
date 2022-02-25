@@ -1,5 +1,5 @@
 import { ChevronUpIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { useVoteMutation, StandardPostFragment } from "../generated/graphql";
 
@@ -29,22 +29,33 @@ const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         {post.points} points
       </Text>
       <Flex direction="column">
-        <ChevronUpIcon
-          aria-label="upvote"
-          h={6}
-          w={6}
-          _hover={{ color: fetching ? "grey" : "green.400" }}
+        <Button
+          h={8}
+          w={4}
+          my={1}
           onClick={() => (!fetching ? onVote(post.id, 1) : null)}
-          cursor="pointer"
-        />
-        <ChevronDownIcon
-          aria-label="downvote"
-          h={6}
-          w={6}
-          _hover={{ color: fetching ? "grey" : "red.400" }}
+          bgColor={post.voteStatus == 1 ? "green.300" : undefined}
+        >
+          <ChevronUpIcon
+            aria-label="upvote"
+            h={6}
+            w={6}
+            _hover={{ color: fetching ? "grey" : "green.400" }}
+          />
+        </Button>
+        <Button
+          h={8}
+          w={4}
           onClick={() => (!fetching ? onVote(post.id, -1) : null)}
-          cursor="pointer"
-        />
+          bgColor={post.voteStatus == -1 ? "red.300" : undefined}
+        >
+          <ChevronDownIcon
+            aria-label="downvote"
+            h={6}
+            w={6}
+            _hover={{ color: fetching ? "grey" : "red.400" }}
+          />
+        </Button>
       </Flex>
     </Flex>
   );
