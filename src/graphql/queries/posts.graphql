@@ -3,6 +3,7 @@ query Posts($limit: Int!, $cursor: String) {
         posts {
             createdAt
             id
+            points
             poster {
                 id
                 username

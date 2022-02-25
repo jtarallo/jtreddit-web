@@ -131,6 +131,15 @@ export const createUrqlClient = (ssrExchange: any) => ({
               }
             );
           },
+          vote(_result, _, cache, __) {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (field) => field.fieldName === "posts"
+            );
+            fieldInfos.forEach((fi) =>
+              cache.invalidate("Query", "posts", fi.arguments)
+            );
+          },
         },
       },
     }),
