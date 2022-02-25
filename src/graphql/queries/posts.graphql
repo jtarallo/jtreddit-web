@@ -3,6 +3,10 @@ query Posts($limit: Int!, $cursor: String) {
         posts {
             createdAt
             id
+            poster {
+                id
+                username
+            }
             updatedAt
             title
             textSnippet

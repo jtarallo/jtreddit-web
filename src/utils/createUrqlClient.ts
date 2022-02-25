@@ -11,6 +11,7 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import Router from "next/router";
+import { INITIAL_POST_QUERY_VARS } from "./globalConstants";
 
 export type MergeMode = "before" | "after";
 
@@ -78,6 +79,13 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          createPost(_result, _, cache, __) {
+            console.log(cache.inspectFields("Query"));
+            cache.invalidate("Query", "posts", {
+              ...INITIAL_POST_QUERY_VARS,
+            });
+            console.log(cache.inspectFields("Query"));
+          },
           login: (_result, _, cache, __) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,

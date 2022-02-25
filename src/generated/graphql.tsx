@@ -33,6 +33,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   register: UserResponse;
   updatePost?: Maybe<Post>;
+  vote: Scalars['Boolean'];
 };
 
 
@@ -72,6 +73,12 @@ export type MutationUpdatePostArgs = {
   input: PostInput;
 };
 
+
+export type MutationVoteArgs = {
+  postId: Scalars['String'];
+  value: Scalars['Int'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   hasMore: Scalars['Boolean'];
@@ -83,6 +90,7 @@ export type Post = {
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
   points: Scalars['Float'];
+  poster: User;
   posterId: Scalars['String'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -199,7 +207,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', createdAt: any, id: string, updatedAt: any, title: string, textSnippet: string }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', createdAt: any, id: string, updatedAt: any, title: string, textSnippet: string, poster: { __typename?: 'User', id: string, username: string } }> } };
 
 export const StandardPostFragmentDoc = gql`
     fragment StandardPost on Post {
@@ -314,6 +322,10 @@ export const PostsDocument = gql`
     posts {
       createdAt
       id
+      poster {
+        id
+        username
+      }
       updatedAt
       title
       textSnippet

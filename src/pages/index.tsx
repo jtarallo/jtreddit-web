@@ -1,19 +1,17 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../generated/graphql";
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { Layout } from "../components/Layout";
 import useInView from "react-cool-inview";
 import { useState } from "react";
+import { INITIAL_POST_QUERY_VARS } from "../utils/globalConstants";
 
 const Index = () => {
   const [postQueryVars, setPostQueryVars] = useState<{
     limit: number;
-    cursor: string | null;
-  }>({
-    limit: 10,
-    cursor: null,
-  });
+    cursor?: string | null;
+  }>(INITIAL_POST_QUERY_VARS);
 
   const [{ data, fetching }] = usePostsQuery({
     variables: postQueryVars,
@@ -21,7 +19,7 @@ const Index = () => {
 
   const { observe } = useInView({
     // For better UX, we can grow the root margin so the data will be loaded earlier
-    rootMargin: "50px 0px",
+    rootMargin: "100px 0px",
     // When the last item comes to the viewport
     onEnter: ({ unobserve }) => {
       // Pause observe when loading data
@@ -51,7 +49,8 @@ const Index = () => {
               borderWidth="2px"
               color={"white"}
               key={p.id}
-              p={4}
+              px={4}
+              py={2}
               ref={idx === data.posts.posts.length - 1 ? observe : null}
               shadow="md"
               width="100%"
@@ -62,6 +61,13 @@ const Index = () => {
               <Text px={8} pb={8} pt={4}>
                 {p.textSnippet}
               </Text>
+              <Flex justifyContent="end" width="full" fontSize={"sm"}>
+                <Text>by @</Text>
+                <Text fontWeight={700}>{p.poster.username}</Text>
+                <Text>
+                  &nbsp;at {new Date(p.createdAt).toLocaleDateString()}
+                </Text>
+              </Flex>
             </Box>
           ))}
           {!data.posts.hasMore ? (
