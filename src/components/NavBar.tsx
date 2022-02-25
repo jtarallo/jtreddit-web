@@ -5,6 +5,7 @@ import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { isServer } from "../utils/isServer";
 import { UilPlus } from "@iconscout/react-unicons";
+import ColorModeSwitch from "./ColorModeSwitch";
 
 export const NavBar: React.FC = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -58,6 +59,7 @@ export const NavBar: React.FC = () => {
   return (
     <Flex bg="teal" p={4} position="sticky" top={0} zIndex={10}>
       <Flex ml="auto" flexDirection={"row"} placeItems="center">
+        <ColorModeSwitch />
         {body}
       </Flex>
     </Flex>

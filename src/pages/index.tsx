@@ -46,13 +46,13 @@ const Index = () => {
             <Box
               backgroundColor={"gray.700"}
               borderRadius="lg"
-              borderWidth="2px"
+              borderWidth="1px"
               color={"white"}
               key={p.id}
               px={4}
               py={2}
               ref={idx === data.posts.posts.length - 1 ? observe : null}
-              shadow="md"
+              shadow="xs"
               width="100%"
             >
               <Heading fontSize={"2xl"} p={4}>
@@ -64,9 +64,7 @@ const Index = () => {
               <Flex justifyContent="end" width="full" fontSize={"sm"}>
                 <Text>by @</Text>
                 <Text fontWeight={700}>{p.poster.username}</Text>
-                <Text>
-                  &nbsp;at {new Date(p.createdAt).toLocaleDateString()}
-                </Text>
+                <Text>&nbsp;at {new Date(p.createdAt).toLocaleString()}</Text>
               </Flex>
             </Box>
           ))}
