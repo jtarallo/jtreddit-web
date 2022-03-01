@@ -6,6 +6,7 @@ import {
   MeQuery,
   RegisterMutation,
   LogoutMutation,
+  DeletePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
@@ -90,6 +91,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
             fieldInfos.forEach((fi) =>
               cache.invalidate("Query", "posts", fi.arguments)
             );
+          },
+          deletePost(_result, args, cache, __) {
+            cache.invalidate({
+              __typename: "Post",
+              id: (args as DeletePostMutationVariables).id,
+            });
           },
           login: (_result, _, cache, __) => {
             betterUpdateQuery<LoginMutation, MeQuery>(

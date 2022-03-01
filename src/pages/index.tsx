@@ -39,13 +39,17 @@ const Index = () => {
         <>No data to show</>
       ) : (
         <VStack spacing={6} pb={6}>
-          {data.posts.posts.map((p, idx) => (
-            <PostCard
-              key={p.id}
-              observe={idx === data.posts.posts.length - 1 ? observe : () => {}}
-              post={p}
-            />
-          ))}
+          {data.posts.posts.map((p, idx) =>
+            !p ? null : (
+              <PostCard
+                key={p.id}
+                observe={
+                  idx === data.posts.posts.length - 1 ? observe : () => {}
+                }
+                post={p}
+              />
+            )
+          )}
           {!data.posts.hasMore ? (
             <Text px={8} pb={8} pt={4}>
               Last post loaded

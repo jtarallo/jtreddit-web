@@ -58,22 +58,17 @@ export const NavBar: React.FC = () => {
     );
   }
   return (
-    <Flex
-      bg="teal"
-      p={4}
-      position="sticky"
-      alignItems="center"
-      top={0}
-      zIndex={10}
-    >
-      <Heading fontSize={"3xl"}>
-        <Link href="/" as="/">
-          JTReddit
-        </Link>
-      </Heading>
-      <Flex ml="auto" flexDirection={"row"} placeItems="center">
-        <ColorModeSwitch />
-        {body}
+    <Flex bg="teal" position="sticky" top={0} zIndex={10}>
+      <Flex alignItems="center" p={4} m="auto" flex="1" maxW={1024}>
+        <Heading fontSize={"3xl"}>
+          <Link href="/" as="/">
+            JTReddit
+          </Link>
+        </Heading>
+        <Flex ml="auto" flexDirection={"row"} placeItems="center">
+          <ColorModeSwitch />
+          {body}
+        </Flex>
       </Flex>
     </Flex>
   );

@@ -1,7 +1,11 @@
-import { Box, Heading, Flex, Text } from "@chakra-ui/react";
+import { Box, Heading, Flex, Text, Button } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import React from "react";
-import { SnippetPostFragment } from "../generated/graphql";
+import {
+  SnippetPostFragment,
+  useDeletePostMutation,
+} from "../generated/graphql";
 import UpvoteSection from "./UpvoteSection";
 
 interface PostCardProps {
@@ -10,6 +14,7 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post, observe }) => {
+  const [, deletePost] = useDeletePostMutation();
   return (
     <Box
       backgroundColor={"gray.700"}
@@ -33,10 +38,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post, observe }) => {
       <Text px={8} pb={8} pt={4}>
         {post.textSnippet}
       </Text>
-      <Flex justifyContent="end" width="full" fontSize={"sm"}>
-        <Text>by @</Text>
-        <Text fontWeight={700}>{post.poster.username}</Text>
-        <Text>&nbsp;at {new Date(post.createdAt).toLocaleString()}</Text>
+      <Flex>
+        <Flex justifyContent="begin" width="full" fontSize={"sm"}>
+          <Text>by @</Text>
+          <Text fontWeight={700}>{post.poster.username}</Text>
+          <Text>&nbsp;at {new Date(post.createdAt).toLocaleString()}</Text>
+        </Flex>
+        <Button onClick={() => deletePost({ id: post.id })}>
+          <DeleteIcon />
+        </Button>
       </Flex>
     </Box>
   );
