@@ -142,6 +142,15 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
               }
             );
           },
+          updatePost(_result, _, cache, __) {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (field) => field.fieldName === "posts"
+            );
+            fieldInfos.forEach((fi) =>
+              cache.invalidate("Query", "posts", fi.arguments)
+            );
+          },
           vote(_result, args, cache, __) {
             const { postId, value } = args as VoteMutationVariables;
 
