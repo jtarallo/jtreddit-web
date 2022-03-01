@@ -1,15 +1,9 @@
-import { Box, Heading, Flex, Text, Button } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Heading, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import {
-  SnippetPostFragment,
-  useDeletePostMutation,
-  useMeQuery,
-} from "../generated/graphql";
+import { SnippetPostFragment } from "../generated/graphql";
 import UpvoteSection from "./UpvoteSection";
-import { useRouter } from "next/router";
-import { isServer } from "../utils/isServer";
+import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
 interface PostCardProps {
   post: SnippetPostFragment;
@@ -17,11 +11,6 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post, observe }) => {
-  const [, deletePost] = useDeletePostMutation();
-  const [{ data }] = useMeQuery({
-    pause: isServer(),
-  });
-  const router = useRouter();
   return (
     <Box
       backgroundColor={"gray.700"}
@@ -51,16 +40,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, observe }) => {
           <Text fontWeight={700}>{post.poster.username}</Text>
           <Text>&nbsp;at {new Date(post.createdAt).toLocaleString()}</Text>
         </Flex>
-        {post.poster.id === data?.me?.id ? (
-          <>
-            <Button mr={2} onClick={() => router.push(`/post/edit/${post.id}`)}>
-              <EditIcon />
-            </Button>
-            <Button onClick={() => deletePost({ id: post.id })}>
-              <DeleteIcon />
-            </Button>
-          </>
-        ) : null}
+        <EditAndDeleteButtons postId={post.id} posterId={post.poster.id} />
       </Flex>
     </Box>
   );

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { usePostQuery } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
 import { Box, Heading } from "@chakra-ui/react";
+import { EditAndDeleteButtons } from "../../components/EditAndDeleteButtons";
 
 const Post: React.FC = ({}) => {
   const router = useRouter();
@@ -29,7 +30,10 @@ const Post: React.FC = ({}) => {
   return (
     <Layout>
       <Heading>{post.title}</Heading>
-      <Box p={4}>{post.text}</Box>
+      <Box p={6} mb={8}>
+        {post.text}
+      </Box>
+      <EditAndDeleteButtons posterId={post.poster.id} postId={post.id} />
     </Layout>
   );
 };
