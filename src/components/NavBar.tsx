@@ -46,9 +46,9 @@ export const NavBar: React.FC = () => {
         <Flex>
           <Button
             isLoading={logoutFetching}
-            onClick={() => {
-              logout();
-              router.push("/");
+            onClick={async () => {
+              await logout();
+              router.reload();
             }}
           >
             Logout

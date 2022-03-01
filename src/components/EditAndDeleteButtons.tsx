@@ -30,8 +30,8 @@ export const EditAndDeleteButtons: React.FC<EditAndDeleteButtonsProps> = ({
         <EditIcon />
       </Button>
       <Button
-        onClick={() => {
-          deletePost({ id: postId });
+        onClick={async () => {
+          await deletePost({ id: postId });
           router.back();
         }}
       >

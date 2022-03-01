@@ -1,5 +1,5 @@
 import { fetchExchange, dedupExchange, stringifyVariables, gql } from "urql";
-import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { Cache, cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import {
   MeDocument,
   LoginMutation,
@@ -62,6 +62,12 @@ const errorExchange: Exchange =
     );
   };
 
+const invalidateAllPosts = (cache: Cache) => {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((field) => field.fieldName === "posts");
+  fieldInfos.forEach((fi) => cache.invalidate("Query", "posts", fi.arguments));
+};
+
 export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
   url: "http://localhost:4000/graphql",
   fetchOptions: {
@@ -84,13 +90,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
       updates: {
         Mutation: {
           createPost(_result, _, cache, __) {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (field) => field.fieldName === "posts"
-            );
-            fieldInfos.forEach((fi) =>
-              cache.invalidate("Query", "posts", fi.arguments)
-            );
+            invalidateAllPosts(cache);
           },
           deletePost(_result, args, cache, __) {
             cache.invalidate({
@@ -115,6 +115,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
                 }
               }
             );
+            invalidateAllPosts(cache);
           },
           logout: (_result, _, cache, __) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
@@ -143,13 +144,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
             );
           },
           updatePost(_result, _, cache, __) {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (field) => field.fieldName === "posts"
-            );
-            fieldInfos.forEach((fi) =>
-              cache.invalidate("Query", "posts", fi.arguments)
-            );
+            invalidateAllPosts(cache);
           },
           vote(_result, args, cache, __) {
             const { postId, value } = args as VoteMutationVariables;
