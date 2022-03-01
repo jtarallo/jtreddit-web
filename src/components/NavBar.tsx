@@ -1,11 +1,12 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Heading } from "@chakra-ui/react";
 import React from "react";
 import { LinkFlexPadded } from "./LinkFlexPadded";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
-import { isServer } from "../utils/isServer";
 import { UilPlus } from "@iconscout/react-unicons";
 import ColorModeSwitch from "./ColorModeSwitch";
+import { isServer } from "../utils/isServer";
+import Link from "next/link";
 
 export const NavBar: React.FC = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -57,7 +58,19 @@ export const NavBar: React.FC = () => {
     );
   }
   return (
-    <Flex bg="teal" p={4} position="sticky" top={0} zIndex={10}>
+    <Flex
+      bg="teal"
+      p={4}
+      position="sticky"
+      alignItems="center"
+      top={0}
+      zIndex={10}
+    >
+      <Heading fontSize={"3xl"}>
+        <Link href="/" as="/">
+          JTReddit
+        </Link>
+      </Heading>
       <Flex ml="auto" flexDirection={"row"} placeItems="center">
         <ColorModeSwitch />
         {body}

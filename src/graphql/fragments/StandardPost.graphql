@@ -8,6 +8,6 @@ fragment StandardPost on Post {
     }
     updatedAt
     title
-    textSnippet
+    text
     voteStatus
 }

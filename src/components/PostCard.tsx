@@ -1,10 +1,11 @@
 import { Box, Heading, Flex, Text } from "@chakra-ui/react";
+import Link from "next/link";
 import React from "react";
-import { StandardPostFragment } from "../generated/graphql";
+import { SnippetPostFragment } from "../generated/graphql";
 import UpvoteSection from "./UpvoteSection";
 
 interface PostCardProps {
-  post: StandardPostFragment;
+  post: SnippetPostFragment;
   observe: (element?: HTMLElement | null | undefined) => void;
 }
 
@@ -25,7 +26,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, observe }) => {
     >
       <UpvoteSection post={post} />
       <Heading fontSize={"2xl"} p={4}>
-        {post.title}
+        <Link href="/post/[id]" as={`/post/${post.id}`}>
+          {post.title}
+        </Link>
       </Heading>
       <Text px={8} pb={8} pt={4}>
         {post.textSnippet}
